@@ -6,8 +6,7 @@ import (
 	"net/http"
 )
 
-
-func main (){
+func main() {
 	http.HandleFunc("/hello-world", handleHelloWorld)
 	http.HandleFunc("/health", handleHealth)
 
@@ -15,24 +14,29 @@ func main (){
 	log.Printf("Listening on %s ...", addr)
 
 	err := http.ListenAndServe(addr, nil)
-	if err != nil{
+	if err != nil {
 		log.Fatal(err)
 	}
 
 }
 
-func handleHelloWorld(writer http.ResponseWriter, request *http.Request){
-	if request.Method != "GET"{
+func handleHelloWorld(writer http.ResponseWriter, request *http.Request) {
+	if request.Method != "GET" {
 		http.Error(writer, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
 	}
-response := []byte("Hello World")
-_, err:= writer.Write(response)
-if err != nil{
-	fmt.Println(err)
+	writeResponse(writer, "Hello world")
 }
-}
-func handleHealth(writer http.ResponseWriter, request *http.Request){
-	if request.Method != "GET"{
+func handleHealth(writer http.ResponseWriter, request *http.Request) {
+	if request.Method != "GET" {
 		http.Error(writer, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
+	}
+	writeResponse(writer, "Ok")
+}
+
+func writeResponse(writer http.ResponseWriter, responseString string) {
+	response := []byte(responseString)
+	_, err := writer.Write(response)
+	if err != nil {
+		fmt.Println(err)
 	}
 }
